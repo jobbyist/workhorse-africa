@@ -12,6 +12,7 @@ export const AuthSheet: React.FC<AuthSheetProps> = ({ isOpen, onClose }) => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [listingIntent, setListingIntent] = useState<'sell' | 'rent-lease'>('sell');
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
@@ -25,7 +26,10 @@ export const AuthSheet: React.FC<AuthSheetProps> = ({ isOpen, onClose }) => {
           email,
           password,
           options: {
-            emailRedirectTo: `${window.location.origin}/`
+            emailRedirectTo: `${window.location.origin}/`,
+            data: {
+              listingIntent,
+            },
           }
         });
         
@@ -88,11 +92,43 @@ export const AuthSheet: React.FC<AuthSheetProps> = ({ isOpen, onClose }) => {
           </h2>
           <p className="text-gray-600 text-sm mb-8">
             {isSignUp 
-              ? 'Join us to create and manage your events' 
+              ? 'Create an account to list vehicles for sale or rent/lease.' 
               : 'Welcome back! Please sign in to continue'}
           </p>
 
           <form onSubmit={handleAuth} className="flex flex-col gap-6">
+            {isSignUp ? (
+              <fieldset className="flex flex-col gap-3">
+                <legend className="text-black text-sm font-medium uppercase tracking-wide">
+                  I want to
+                </legend>
+                <label className="flex items-center gap-3 text-sm text-gray-700">
+                  <input
+                    type="radio"
+                    name="listing-intent"
+                    value="sell"
+                    checked={listingIntent === 'sell'}
+                    onChange={() => setListingIntent('sell')}
+                    className="h-4 w-4 border-black/20 text-blue-600 focus:ring-blue-600"
+                  />
+                  Sell my car
+                </label>
+                <label className="flex items-center gap-3 text-sm text-gray-700">
+                  <input
+                    type="radio"
+                    name="listing-intent"
+                    value="rent-lease"
+                    checked={listingIntent === 'rent-lease'}
+                    onChange={() => setListingIntent('rent-lease')}
+                    className="h-4 w-4 border-black/20 text-blue-600 focus:ring-blue-600"
+                  />
+                  Rent or lease my car
+                </label>
+                <p className="text-xs text-gray-500">
+                  We’ll tailor your onboarding for selling or rentals/leases.
+                </p>
+              </fieldset>
+            ) : null}
             <div>
               <label htmlFor="email" className="block text-black text-sm font-medium mb-2 uppercase tracking-wide">
                 Email

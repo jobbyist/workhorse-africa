@@ -203,7 +203,7 @@ const ListVehicle = () => {
     <>
       <SEOHead 
         title="List Your Vehicle"
-        description="Sell your car on Workhorse - the peer-to-peer marketplace for pre-owned vehicles in South Africa"
+        description="List your car on Workhorse - the peer-to-peer marketplace for selling or renting vehicles in South Africa"
       />
       <AuthSheet isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
       
@@ -483,7 +483,7 @@ const ListVehicle = () => {
 
                 {/* Description */}
                 <textarea
-                  placeholder="Describe your vehicle - include any features, history, or reason for selling"
+                  placeholder="Describe your vehicle - include features, history, and whether you want to sell or rent/lease"
                   rows={6}
                   className="w-full px-3 md:px-4 py-2 md:py-3 text-[14px] md:text-[17px] text-foreground border border-foreground focus:outline-none resize-none placeholder:text-muted-foreground bg-transparent"
                   value={description}
