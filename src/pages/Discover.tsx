@@ -208,9 +208,9 @@ const Discover = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEOHead 
-        title="Find Pre-Owned Vehicles | Workhorse"
-        description="Buy and sell quality pre-owned vehicles across South Africa. Browse Toyota, BMW, VW, Mercedes, and more from trusted private sellers."
-        keywords="used cars, pre-owned vehicles, second hand cars, South Africa, buy cars, sell cars, Toyota, BMW, Mercedes, Volkswagen"
+        title="Peer-to-Peer Dealership & Car Rentals | Workhorse"
+        description="Workhorse is an online, peer-to-peer dealership for quality pre-owned vehicles and a car rentals agency where anyone can make an offer or request to rent/lease directly from the owner."
+        keywords="used cars, pre-owned vehicles, car rentals, lease cars, peer-to-peer dealership, South Africa, buy cars, sell cars, Toyota, BMW, Mercedes, Volkswagen"
       />
       <div className="animate-fade-in" style={{ animationDelay: '0.1s', animationFillMode: 'both' }}>
         <Navbar />
@@ -237,7 +237,7 @@ const Discover = () => {
             </div>
           </h1>
           <p className="text-sm md:text-base lg:text-[18px] text-foreground max-w-2xl mx-auto animate-fade-in" style={{ animationDelay: '0.7s', animationFillMode: 'both' }}>
-            Buy and sell quality pre-owned vehicles directly from private sellers. No dealership markups, just fair deals between real people.
+            Workhorse is an online, peer-to-peer dealership for quality pre-owned vehicles and a car rentals agency where anyone can make an offer or request to rent/lease directly from the owner.
           </p>
         </div>
       </section>

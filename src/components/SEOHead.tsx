@@ -11,7 +11,7 @@ interface SEOHeadProps {
 export const SEOHead = ({ 
   title, 
   description, 
-  keywords = 'used cars, pre-owned vehicles, second hand cars, buy cars, sell cars, South Africa',
+  keywords = 'used cars, pre-owned vehicles, second hand cars, buy cars, sell cars, car rentals, lease cars, peer-to-peer dealership, South Africa',
   image = '/placeholder.svg',
   url = window.location.href
 }: SEOHeadProps) => {
