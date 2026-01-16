@@ -203,7 +203,7 @@ const ListVehicle = () => {
     <>
       <SEOHead 
         title="List Your Vehicle"
-        description="List your car on Workhorse - the peer-to-peer marketplace for selling or renting vehicles in South Africa"
+        description="List your car on Workhorse - the peer-to-peer dealership and rental marketplace for selling or renting vehicles in South Africa"
       />
       <AuthSheet isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
       
