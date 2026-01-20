@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar } from '@/components/Navbar';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import arrowDown from '@/assets/arrow-down.png';
 import { SEOHead } from '@/components/SEOHead';
@@ -9,6 +9,11 @@ import { RotatingBadge } from '@/components/RotatingBadge';
 import { VehicleSearch } from '@/components/VehicleSearch';
 import { LocationFilter } from '@/components/LocationFilter';
 import { VEHICLE_BRANDS, VehicleBrand } from '@/constants/eventCategories';
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
+import { Helmet } from 'react-helmet-async';
+import { getVehicleImageUrl, VEHICLE_PLACEHOLDER_IMAGE } from '@/lib/vehicleImage';
+
+const ITEMS_PER_PAGE = 16;
 
 interface Vehicle {
   id: string;
@@ -33,6 +38,7 @@ const VehicleCard = ({
   vehicle: Vehicle;
 }) => {
   const navigate = useNavigate();
+  const [imageSrc, setImageSrc] = useState(() => getVehicleImageUrl(vehicle));
   
   const isNewlyListed = () => {
     const now = new Date().getTime();
@@ -43,6 +49,10 @@ const VehicleCard = ({
   
   const isNew = isNewlyListed();
   const brandInfo = VEHICLE_BRANDS.find(c => c.value === vehicle.category);
+
+  useEffect(() => {
+    setImageSrc(getVehicleImageUrl(vehicle));
+  }, [vehicle]);
   
   return (
     <div 
@@ -50,10 +60,15 @@ const VehicleCard = ({
       onClick={() => navigate(`/vehicle/${vehicle.id}`)}
     >
       <div className="overflow-hidden mb-3">
-        <div 
-          className="aspect-square bg-muted bg-cover bg-center transition-transform duration-500 ease-out group-hover:scale-110"
-          style={{ backgroundImage: `url(${vehicle.background_image_url})` }}
-        ></div>
+        <div className="aspect-square bg-muted">
+          <img
+            src={imageSrc}
+            alt={vehicle.title}
+            loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+            onError={() => setImageSrc(VEHICLE_PLACEHOLDER_IMAGE)}
+          />
+        </div>
       </div>
       <div className="absolute top-4 left-4 flex flex-col gap-0">
         {vehicle.ticket_price && (
@@ -99,6 +114,7 @@ const Discover = () => {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
   const [userCountry, setUserCountry] = useState<string>('South Africa');
+  const [searchParams, setSearchParams] = useSearchParams();
   
   // Search and filter state
   const [searchQuery, setSearchQuery] = useState('');
@@ -113,6 +129,17 @@ const Discover = () => {
     fetchVehicles();
     detectUserCountry();
   }, []);
+
+  useEffect(() => {
+    if (!searchQuery && !selectedBrand && !priceRange[0] && !priceRange[1] && !yearRange[0] && !yearRange[1] && !mileageMax && !selectedCountry && !selectedCity) {
+      return;
+    }
+    if (searchParams.get('page') !== '1') {
+      const params = new URLSearchParams(searchParams);
+      params.set('page', '1');
+      setSearchParams(params, { replace: true });
+    }
+  }, [searchQuery, selectedBrand, priceRange, yearRange, mileageMax, selectedCountry, selectedCity, searchParams, setSearchParams]);
 
   const detectUserCountry = async () => {
     try {
@@ -186,6 +213,25 @@ const Discover = () => {
     return true;
   });
 
+  const pageParam = Number.parseInt(searchParams.get('page') ?? '1', 10);
+  const currentPage = Number.isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
+  const totalPages = Math.max(1, Math.ceil(filteredVehicles.length / ITEMS_PER_PAGE));
+  const safePage = Math.min(currentPage, totalPages);
+  const pageStartIndex = filteredVehicles.length === 0 ? 0 : (safePage - 1) * ITEMS_PER_PAGE + 1;
+  const pageEndIndex = Math.min(safePage * ITEMS_PER_PAGE, filteredVehicles.length);
+  const paginatedVehicles = filteredVehicles.slice(
+    (safePage - 1) * ITEMS_PER_PAGE,
+    safePage * ITEMS_PER_PAGE
+  );
+
+  useEffect(() => {
+    if (currentPage !== safePage) {
+      const params = new URLSearchParams(searchParams);
+      params.set('page', String(safePage));
+      setSearchParams(params, { replace: true });
+    }
+  }, [currentPage, safePage, searchParams, setSearchParams]);
+
   const scrollToListings = () => {
     const listingsSection = document.getElementById('listings-section');
     listingsSection?.scrollIntoView({
@@ -203,10 +249,47 @@ const Discover = () => {
     setSelectedCity(null);
   };
 
+  const buildPageHref = (page: number) => `/?page=${page}`;
+  const handlePageClick = (page: number) => (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    if (page === safePage) return;
+    const params = new URLSearchParams(searchParams);
+    params.set('page', String(page));
+    setSearchParams(params);
+    scrollToListings();
+  };
+
+  const paginationItems = (() => {
+    if (totalPages <= 1) return [];
+    const pages = new Set<number>();
+    pages.add(1);
+    pages.add(totalPages);
+    for (let page = safePage - 1; page <= safePage + 1; page += 1) {
+      if (page >= 1 && page <= totalPages) {
+        pages.add(page);
+      }
+    }
+    const sorted = Array.from(pages).sort((a, b) => a - b);
+    const items: Array<number | 'ellipsis'> = [];
+    let previous = 0;
+    sorted.forEach((page) => {
+      if (page - previous > 1) {
+        items.push('ellipsis');
+      }
+      items.push(page);
+      previous = page;
+    });
+    return items;
+  })();
+
   const hasActiveFilters = searchQuery || selectedBrand || priceRange[0] || priceRange[1] || yearRange[0] || yearRange[1] || mileageMax || selectedCountry || selectedCity;
 
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        {safePage > 1 && <link rel="prev" href={buildPageHref(safePage - 1)} />}
+        {safePage < totalPages && <link rel="next" href={buildPageHref(safePage + 1)} />}
+      </Helmet>
       <SEOHead 
         title="Peer-to-Peer Dealership & Car Rentals | Workhorse"
         description="Workhorse is an online, peer-to-peer dealership for quality pre-owned vehicles and a car rentals agency where anyone can make an offer or request to rent/lease directly from the owner."
@@ -276,7 +359,7 @@ const Discover = () => {
             {/* Results count */}
             <div className="flex items-center justify-between">
               <p className="text-sm text-muted-foreground">
-                Showing {filteredVehicles.length} of {vehicles.length} vehicles
+                Showing {pageStartIndex}-{pageEndIndex} of {filteredVehicles.length} vehicles
                 {selectedCountry && ` in ${selectedCountry}`}
               </p>
               {hasActiveFilters && (
@@ -311,7 +394,7 @@ const Discover = () => {
                 )}
               </div>
             ) : (
-              filteredVehicles.map((vehicle, index) => (
+              paginatedVehicles.map((vehicle, index) => (
                 <div 
                   key={vehicle.id} 
                   className="animate-fade-in" 
@@ -322,6 +405,41 @@ const Discover = () => {
               ))
             )}
           </div>
+          {totalPages > 1 && (
+            <Pagination className="mt-10">
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    href={buildPageHref(Math.max(1, safePage - 1))}
+                    onClick={handlePageClick(Math.max(1, safePage - 1))}
+                    aria-disabled={safePage === 1}
+                  />
+                </PaginationItem>
+                {paginationItems.map((item, index) => (
+                  <PaginationItem key={`${item}-${index}`}>
+                    {item === 'ellipsis' ? (
+                      <PaginationEllipsis />
+                    ) : (
+                      <PaginationLink
+                        href={buildPageHref(item)}
+                        isActive={item === safePage}
+                        onClick={handlePageClick(item)}
+                      >
+                        {item}
+                      </PaginationLink>
+                    )}
+                  </PaginationItem>
+                ))}
+                <PaginationItem>
+                  <PaginationNext
+                    href={buildPageHref(Math.min(totalPages, safePage + 1))}
+                    onClick={handlePageClick(Math.min(totalPages, safePage + 1))}
+                    aria-disabled={safePage === totalPages}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          )}
         </div>
       </section>
     </div>
