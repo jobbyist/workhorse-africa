@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" role="img" aria-label="Workhorse Africa vehicle placeholder">
+  <rect width="1200" height="1200" fill="#CFCFCF" />
+  <g transform="translate(150 650)">
+    <text x="0" y="0" font-family="Arial Black, Arial, sans-serif" font-size="160" fill="#111111" letter-spacing="4">
+      WORKHORSE
+    </text>
+    <text x="0" y="140" font-family="Georgia, 'Times New Roman', serif" font-size="120" fill="#7A7A7A" letter-spacing="2">
+      AFRICA
+    </text>
+  </g>
+</svg>

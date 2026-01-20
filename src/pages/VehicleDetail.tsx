@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Navbar } from '@/components/Navbar';
 import { SEOHead } from '@/components/SEOHead';
 import { VEHICLE_BRANDS } from '@/constants/eventCategories';
+import { getVehicleImageUrl, VEHICLE_PLACEHOLDER_IMAGE } from '@/lib/vehicleImage';
 import { toast } from 'sonner';
 import { Phone, Mail, MapPin, Calendar, Gauge, Fuel, Settings2, CheckCircle } from 'lucide-react';
 
@@ -37,6 +38,7 @@ export const VehicleDetail: React.FC = () => {
   const [vehicle, setVehicle] = useState<Vehicle | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [imageSrc, setImageSrc] = useState(VEHICLE_PLACEHOLDER_IMAGE);
   
   // Inquiry form state
   const [inquiryName, setInquiryName] = useState('');
@@ -48,6 +50,12 @@ export const VehicleDetail: React.FC = () => {
   useEffect(() => {
     fetchVehicle();
   }, [id]);
+
+  useEffect(() => {
+    if (vehicle) {
+      setImageSrc(getVehicleImageUrl(vehicle));
+    }
+  }, [vehicle]);
   
   const fetchVehicle = async () => {
     if (!id) {
@@ -152,7 +160,7 @@ export const VehicleDetail: React.FC = () => {
       <SEOHead 
         title={vehicle.title}
         description={vehicle.description.substring(0, 160)}
-        image={vehicle.background_image_url}
+        image={imageSrc}
         keywords={`${vehicle.title}, ${brandInfo?.label || ''}, used cars, pre-owned vehicles, South Africa`}
       />
       <Navbar />
@@ -165,9 +173,10 @@ export const VehicleDetail: React.FC = () => {
               {/* Main Image */}
               <div className="aspect-[4/3] w-full bg-muted mb-6 overflow-hidden">
                 <img 
-                  src={vehicle.background_image_url} 
+                  src={imageSrc} 
                   alt={vehicle.title}
                   className="w-full h-full object-cover"
+                  onError={() => setImageSrc(VEHICLE_PLACEHOLDER_IMAGE)}
                 />
               </div>
 
