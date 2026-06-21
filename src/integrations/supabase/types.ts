@@ -14,107 +14,182 @@ export type Database = {
   }
   public: {
     Tables: {
-      event_registrations: {
+      luxury_waitlist: {
         Row: {
-          event_id: string
+          city: string | null
+          created_at: string
+          desired_vehicle: string | null
+          email: string
           id: string
-          registered_at: string
-          user_id: string
+          name: string
+          phone: string | null
         }
         Insert: {
-          event_id: string
+          city?: string | null
+          created_at?: string
+          desired_vehicle?: string | null
+          email: string
           id?: string
-          registered_at?: string
-          user_id: string
+          name: string
+          phone?: string | null
         }
         Update: {
-          event_id?: string
+          city?: string | null
+          created_at?: string
+          desired_vehicle?: string | null
+          email?: string
           id?: string
-          registered_at?: string
-          user_id?: string
+          name?: string
+          phone?: string | null
+        }
+        Relationships: []
+      }
+      p2p_bookings: {
+        Row: {
+          commission_amount: number
+          created_at: string
+          end_date: string
+          id: string
+          listing_id: string
+          message: string | null
+          owner_id: string
+          renter_id: string
+          start_date: string
+          status: string
+          total_amount: number
+          updated_at: string
+        }
+        Insert: {
+          commission_amount?: number
+          created_at?: string
+          end_date: string
+          id?: string
+          listing_id: string
+          message?: string | null
+          owner_id: string
+          renter_id: string
+          start_date: string
+          status?: string
+          total_amount: number
+          updated_at?: string
+        }
+        Update: {
+          commission_amount?: number
+          created_at?: string
+          end_date?: string
+          id?: string
+          listing_id?: string
+          message?: string | null
+          owner_id?: string
+          renter_id?: string
+          start_date?: string
+          status?: string
+          total_amount?: number
+          updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "event_registrations_event_id_fkey"
-            columns: ["event_id"]
+            foreignKeyName: "p2p_bookings_listing_id_fkey"
+            columns: ["listing_id"]
             isOneToOne: false
-            referencedRelation: "events"
+            referencedRelation: "p2p_listings"
             referencedColumns: ["id"]
           },
         ]
       }
-      events: {
+      p2p_listings: {
         Row: {
-          address: string
-          background_image_url: string
-          category: string
-          city: string | null
-          condition: string | null
-          country: string | null
-          created_by: string | null
-          creator: string
-          date: string
-          description: string
+          available_from: string | null
+          available_to: string | null
+          city: string
+          contact_email: string | null
+          contact_phone: string | null
+          created_at: string
+          daily_rate: number
+          description: string | null
           fuel_type: string | null
           id: string
-          is_scraped: boolean | null
-          mileage: number | null
-          source_url: string | null
-          target_date: string
-          ticket_price: number | null
-          ticket_url: string | null
-          time: string
-          title: string
+          images: Json | null
+          location: string | null
+          make: string
+          model: string
+          monthly_rate: number | null
+          owner_id: string
+          primary_image_url: string | null
+          seats: number | null
+          status: string
           transmission: string | null
+          updated_at: string
+          weekly_rate: number | null
           year: number | null
         }
         Insert: {
-          address: string
-          background_image_url: string
-          category?: string
-          city?: string | null
-          condition?: string | null
-          country?: string | null
-          created_by?: string | null
-          creator: string
-          date: string
-          description: string
+          available_from?: string | null
+          available_to?: string | null
+          city: string
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          daily_rate: number
+          description?: string | null
           fuel_type?: string | null
           id?: string
-          is_scraped?: boolean | null
-          mileage?: number | null
-          source_url?: string | null
-          target_date: string
-          ticket_price?: number | null
-          ticket_url?: string | null
-          time: string
-          title: string
+          images?: Json | null
+          location?: string | null
+          make: string
+          model: string
+          monthly_rate?: number | null
+          owner_id: string
+          primary_image_url?: string | null
+          seats?: number | null
+          status?: string
           transmission?: string | null
+          updated_at?: string
+          weekly_rate?: number | null
           year?: number | null
         }
         Update: {
-          address?: string
-          background_image_url?: string
-          category?: string
-          city?: string | null
-          condition?: string | null
-          country?: string | null
-          created_by?: string | null
-          creator?: string
-          date?: string
-          description?: string
+          available_from?: string | null
+          available_to?: string | null
+          city?: string
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          daily_rate?: number
+          description?: string | null
           fuel_type?: string | null
           id?: string
-          is_scraped?: boolean | null
-          mileage?: number | null
-          source_url?: string | null
-          target_date?: string
-          ticket_price?: number | null
-          ticket_url?: string | null
-          time?: string
-          title?: string
+          images?: Json | null
+          location?: string | null
+          make?: string
+          model?: string
+          monthly_rate?: number | null
+          owner_id?: string
+          primary_image_url?: string | null
+          seats?: number | null
+          status?: string
           transmission?: string | null
+          updated_at?: string
+          weekly_rate?: number | null
           year?: number | null
+        }
+        Relationships: []
+      }
+      platform_settings: {
+        Row: {
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value: Json
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: Json
         }
         Relationships: []
       }
@@ -142,6 +217,116 @@ export type Database = {
         }
         Relationships: []
       }
+      rental_listings: {
+        Row: {
+          category: string
+          city: string
+          created_at: string
+          daily_rate: number
+          deeplink_url: string | null
+          features: Json | null
+          fuel_type: string | null
+          id: string
+          image_url: string | null
+          is_active: boolean
+          is_luxury: boolean
+          make: string
+          model: string
+          monthly_rate: number | null
+          seats: number | null
+          supplier_id: string
+          transmission: string | null
+          updated_at: string
+          weekly_rate: number | null
+          year: number | null
+        }
+        Insert: {
+          category?: string
+          city: string
+          created_at?: string
+          daily_rate: number
+          deeplink_url?: string | null
+          features?: Json | null
+          fuel_type?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          is_luxury?: boolean
+          make: string
+          model: string
+          monthly_rate?: number | null
+          seats?: number | null
+          supplier_id: string
+          transmission?: string | null
+          updated_at?: string
+          weekly_rate?: number | null
+          year?: number | null
+        }
+        Update: {
+          category?: string
+          city?: string
+          created_at?: string
+          daily_rate?: number
+          deeplink_url?: string | null
+          features?: Json | null
+          fuel_type?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          is_luxury?: boolean
+          make?: string
+          model?: string
+          monthly_rate?: number | null
+          seats?: number | null
+          supplier_id?: string
+          transmission?: string | null
+          updated_at?: string
+          weekly_rate?: number | null
+          year?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rental_listings_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "rental_suppliers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rental_suppliers: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          logo_url: string | null
+          name: string
+          rating: number | null
+          slug: string
+          website_url: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          logo_url?: string | null
+          name: string
+          rating?: number | null
+          slug: string
+          website_url?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          logo_url?: string | null
+          name?: string
+          rating?: number | null
+          slug?: string
+          website_url?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string | null
@@ -162,82 +347,6 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
-      }
-      vehicle_inquiries: {
-        Row: {
-          created_at: string
-          email: string
-          id: string
-          message: string
-          name: string
-          phone: string | null
-          user_id: string | null
-          vehicle_id: string
-        }
-        Insert: {
-          created_at?: string
-          email: string
-          id?: string
-          message: string
-          name: string
-          phone?: string | null
-          user_id?: string | null
-          vehicle_id: string
-        }
-        Update: {
-          created_at?: string
-          email?: string
-          id?: string
-          message?: string
-          name?: string
-          phone?: string | null
-          user_id?: string | null
-          vehicle_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "vehicle_inquiries_vehicle_id_fkey"
-            columns: ["vehicle_id"]
-            isOneToOne: false
-            referencedRelation: "events"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      vehicle_seller_contacts: {
-        Row: {
-          created_at: string
-          email: string | null
-          event_id: string
-          id: string
-          phone: string | null
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          email?: string | null
-          event_id: string
-          id?: string
-          phone?: string | null
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          email?: string | null
-          event_id?: string
-          id?: string
-          phone?: string | null
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "vehicle_seller_contacts_event_id_fkey"
-            columns: ["event_id"]
-            isOneToOne: true
-            referencedRelation: "events"
-            referencedColumns: ["id"]
-          },
-        ]
       }
     }
     Views: {
