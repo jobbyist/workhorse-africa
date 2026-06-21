@@ -2,14 +2,16 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import Discover from "./pages/Discover";
-import Auth from "./pages/Auth";
+import Home from "./pages/Home";
+import Compare from "./pages/Compare";
+import Luxury from "./pages/Luxury";
+import Marketplace from "./pages/Marketplace";
+import RentalDetail from "./pages/RentalDetail";
+import P2PDetail from "./pages/P2PDetail";
+import ListRental from "./pages/ListRental";
+import MyRentals from "./pages/MyRentals";
 import Admin from "./pages/Admin";
-import MyEvents from "./pages/MyEvents";
-import ListVehicle from "./pages/ListVehicle";
-import VehicleDetail from "./pages/VehicleDetail";
-import EditEvent from "./pages/EditEvent";
+import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
 const App = () => (
@@ -17,16 +19,16 @@ const App = () => (
     <Toaster />
     <Sonner />
     <Routes>
-      <Route path="/" element={<Discover />} />
-      <Route path="/vehicle/:id" element={<VehicleDetail />} />
-      <Route path="/event/:id" element={<VehicleDetail />} />
-      <Route path="/event/:id/edit" element={<EditEvent />} />
-      <Route path="/my-events" element={<MyEvents />} />
-      <Route path="/create-event" element={<ListVehicle />} />
-      <Route path="/list-vehicle" element={<ListVehicle />} />
-      <Route path="/auth" element={<Auth />} />
+      <Route path="/" element={<Home />} />
+      <Route path="/compare" element={<Compare />} />
+      <Route path="/luxury" element={<Luxury />} />
+      <Route path="/marketplace" element={<Marketplace />} />
+      <Route path="/rental/:id" element={<RentalDetail />} />
+      <Route path="/p2p/:id" element={<P2PDetail />} />
+      <Route path="/list-rental" element={<ListRental />} />
+      <Route path="/my-rentals" element={<MyRentals />} />
       <Route path="/admin" element={<Admin />} />
-      {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+      <Route path="/auth" element={<Auth />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   </TooltipProvider>
