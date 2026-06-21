@@ -26,8 +26,8 @@ interface Vehicle {
   transmission: string | null;
   fuel_type: string | null;
   condition: string | null;
-  seller_phone: string | null;
-  seller_email: string | null;
+  seller_phone?: string | null;
+  seller_email?: string | null;
   source_url: string | null;
   is_scraped: boolean | null;
 }
