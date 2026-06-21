@@ -78,6 +78,19 @@ export const VehicleDetail: React.FC = () => {
     } else {
       setVehicle(data);
       setInquiryMessage(`Hi, I'm interested in the ${data.title}. Is it still available?`);
+
+      // Seller contacts are restricted to authenticated users
+      const { data: sessionData } = await supabase.auth.getSession();
+      if (sessionData?.session) {
+        const { data: contact } = await supabase
+          .from('vehicle_seller_contacts')
+          .select('email, phone')
+          .eq('event_id', id)
+          .maybeSingle();
+        if (contact) {
+          setVehicle((prev) => prev ? { ...prev, seller_email: contact.email, seller_phone: contact.phone } : prev);
+        }
+      }
     }
     setLoading(false);
   };
