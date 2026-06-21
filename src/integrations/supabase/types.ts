@@ -59,8 +59,6 @@ export type Database = {
           id: string
           is_scraped: boolean | null
           mileage: number | null
-          seller_email: string | null
-          seller_phone: string | null
           source_url: string | null
           target_date: string
           ticket_price: number | null
@@ -85,8 +83,6 @@ export type Database = {
           id?: string
           is_scraped?: boolean | null
           mileage?: number | null
-          seller_email?: string | null
-          seller_phone?: string | null
           source_url?: string | null
           target_date: string
           ticket_price?: number | null
@@ -111,8 +107,6 @@ export type Database = {
           id?: string
           is_scraped?: boolean | null
           mileage?: number | null
-          seller_email?: string | null
-          seller_phone?: string | null
           source_url?: string | null
           target_date?: string
           ticket_price?: number | null
@@ -205,6 +199,41 @@ export type Database = {
             foreignKeyName: "vehicle_inquiries_vehicle_id_fkey"
             columns: ["vehicle_id"]
             isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vehicle_seller_contacts: {
+        Row: {
+          created_at: string
+          email: string | null
+          event_id: string
+          id: string
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          event_id: string
+          id?: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          event_id?: string
+          id?: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vehicle_seller_contacts_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: true
             referencedRelation: "events"
             referencedColumns: ["id"]
           },
