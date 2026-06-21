@@ -165,7 +165,7 @@ const Home = () => {
               <p className="text-sm font-semibold text-accent uppercase tracking-wider mb-2 flex items-center gap-1.5"><TrendingUp className="w-4 h-4" /> Featured deals</p>
               <h2 className="text-4xl font-bold tracking-tight">Best rentals today</h2>
             </div>
-            <Link to="/compare" className="hidden md:flex items-center gap-1 text-accent font-medium hover:gap-2 transition-all">View all <ArrowRight className="w-4 h-4" /></Linкк>
+            <Link to="/compare" className="hidden md:flex items-center gap-1 text-accent font-medium hover:gap-2 transition-all">View all <ArrowRight className="w-4 h-4" /></Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {featured.map((v) => (
