@@ -1,7 +1,3 @@
-import Discover from './Discover';
-
-const Index = () => {
-  return <Discover />;
-};
-
+import Home from './Home';
+const Index = () => <Home />;
 export default Index;
