@@ -158,7 +158,7 @@ const ListVehicle = () => {
 
       const creatorName = profile?.display_name || user.email?.split('@')[0] || 'Anonymous';
 
-      const { error: insertError } = await supabase
+      const { data: insertedEvent, error: insertError } = await supabase
         .from('events')
         .insert({
           title,
@@ -179,12 +179,24 @@ const ListVehicle = () => {
           transmission: transmission.toLowerCase(),
           fuel_type: fuelType.toLowerCase(),
           condition: condition.toLowerCase(),
-          seller_phone: sellerPhone || null,
-          seller_email: sellerEmail || user.email,
           is_scraped: false,
-        });
+        })
+        .select('id')
+        .single();
 
       if (insertError) throw insertError;
+
+      if (insertedEvent?.id) {
+        const { error: contactError } = await supabase
+          .from('vehicle_seller_contacts')
+          .insert({
+            event_id: insertedEvent.id,
+            phone: sellerPhone || null,
+            email: sellerEmail || user.email,
+          });
+        if (contactError && import.meta.env.DEV) console.error('Error saving seller contacts:', contactError);
+      }
+
 
       toast.success('Vehicle listed successfully!');
       navigate('/my-events');
