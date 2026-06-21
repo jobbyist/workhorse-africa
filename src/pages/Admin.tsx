@@ -32,7 +32,7 @@ const Admin = () => {
 
   return (
     <>
-      <SEOHead title="Admin | Dyrovo" />
+      <SEOHead title="Admin | Dyrovo" description="Dyrovo admin dashboard" />
       <Navbar />
       <div className="pt-24 min-h-screen bg-secondary/30 pb-20">
         <div className="max-w-6xl mx-auto px-4 md:px-8">

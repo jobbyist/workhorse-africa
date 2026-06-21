@@ -34,7 +34,7 @@ const Luxury = () => {
       return;
     }
     setSubmitting(true);
-    const { error } = await supabase.from('luxury_waitlist').insert(parsed.data);
+    const { error } = await supabase.from('luxury_waitlist').insert(parsed.data as any);
     setSubmitting(false);
     if (error) { toast.error('Could not join the waitlist'); return; }
     setSubmitted(true);

@@ -50,7 +50,7 @@ const ListRental = () => {
     if (!parsed.success) { toast.error(parsed.error.issues[0].message); return; }
     if (!user) return;
     setSubmitting(true);
-    const { error } = await supabase.from('p2p_listings').insert({ ...parsed.data, owner_id: user.id });
+    const { error } = await supabase.from('p2p_listings').insert({ ...parsed.data, owner_id: user.id } as any);
     setSubmitting(false);
     if (error) { toast.error(error.message); return; }
     toast.success('Listing published');

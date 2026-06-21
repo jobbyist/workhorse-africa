@@ -30,7 +30,7 @@ const MyRentals = () => {
 
   return (
     <>
-      <SEOHead title="My Dashboard | Dyrovo" />
+      <SEOHead title="My Dashboard | Dyrovo" description="Manage your Dyrovo listings and bookings" />
       <Navbar />
       <div className="pt-24 min-h-screen bg-secondary/30 pb-20">
         <div className="max-w-6xl mx-auto px-4 md:px-8">
